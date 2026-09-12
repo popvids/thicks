@@ -280,18 +280,15 @@ footer a{
     }
 
     function hideVideoPopup(){
-      if(!videoPopup || !videoWrapper) return;
+  videoPopup.style.display = "none";
+  videoWrapper.classList.remove("video-blurred");
 
-      videoPopup.style.display = "none";
-      videoWrapper.classList.remove("video-blurred");
+  // Jangan panggil video.load() atau ubah video.src
+  // Video tetap pada posisi terakhir
 
-      // Resume muted autoplay after Continue
-      video.play().catch(function(){});
-
-      // Show again after 1 minute
-      clearTimeout(popupTimer);
-      popupTimer = setTimeout(showVideoPopup, 15000);
-    }
+  clearTimeout(popupTimer);
+  popupTimer = setTimeout(showVideoPopup, 15000);
+}
 
     if(videoPopup && continueButton){
 
