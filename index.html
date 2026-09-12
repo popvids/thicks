@@ -216,8 +216,8 @@ footer a{
         </div>
 
         <a href="https://omg10.com/4/11704474" class="popup-button" id="continueButton">
-          Continue
-        </a>
+  Continue
+</a>
       </div>
     </div>
 
@@ -263,43 +263,41 @@ footer a{
     /* ============================= */
 
     const videoPopup = document.getElementById("videoPopup");
-    const continueButton = document.getElementById("continueButton");
-    const videoWrapper = document.querySelector(".video-wrapper");
+const continueButton = document.getElementById("continueButton");
+const videoWrapper = document.querySelector(".video-wrapper");
 
-    let popupTimer;
+let popupTimer;
 
-    function showVideoPopup(){
-      if(!videoPopup || !videoWrapper) return;
+function showVideoPopup(){
+  videoPopup.style.display = "flex";
+  videoWrapper.classList.add("video-blurred");
+  video.pause();
+}
 
-      videoPopup.style.display = "flex";
-      videoWrapper.classList.add("video-blurred");
+function hideVideoPopup(){
+  videoPopup.style.display = "none";
+  videoWrapper.classList.remove("video-blurred");
 
-      // Pause video while popup is visible
-      video.pause();
-    }
+  video.play().catch(function(){});
 
-    function hideVideoPopup(){
-      if(!videoPopup || !videoWrapper) return;
+  clearTimeout(popupTimer);
 
-      videoPopup.style.display = "none";
-      videoWrapper.classList.remove("video-blurred");
+  // Popup berikutnya 15 detik kemudian
+  popupTimer = setTimeout(showVideoPopup, 15000);
+}
 
-      // Resume muted autoplay after Continue
-      video.play().catch(function(){});
+continueButton.addEventListener("click", function(e){
+  e.preventDefault();
 
-      // Show again after 1 minute
-      clearTimeout(popupTimer);
-      popupTimer = setTimeout(showVideoPopup, 15000);
-    }
+  // Simpan bahwa popup sudah ditutup
+  hideVideoPopup();
 
-    if(videoPopup && continueButton){
-
-      continueButton.addEventListener("click", function(){
-  window.location.href = continueButton.href;
+  // Buka URL di tab baru
+  window.open(this.href, "_blank", "noopener,noreferrer");
 });
 
-      // First popup appears after 1 minute
-      popupTimer = setTimeout(showVideoPopup, 15000);
+// Popup pertama setelah 15 detik
+popupTimer = setTimeout(showVideoPopup, 15000);
     }
 
 
