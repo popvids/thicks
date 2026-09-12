@@ -14,6 +14,7 @@
       box-sizing:border-box;
       font-family:Arial,sans-serif;
     }
+
 body{
   background:#f3f3f3;
   color:#111;
@@ -216,8 +217,8 @@ footer a{
         </div>
 
         <a href="https://omg10.com/4/11704474" class="popup-button" id="continueButton">
-  Continue
-</a>
+          Continue
+        </a>
       </div>
     </div>
 
@@ -263,41 +264,44 @@ footer a{
     /* ============================= */
 
     const videoPopup = document.getElementById("videoPopup");
-const continueButton = document.getElementById("continueButton");
-const videoWrapper = document.querySelector(".video-wrapper");
+    const continueButton = document.getElementById("continueButton");
+    const videoWrapper = document.querySelector(".video-wrapper");
 
-let popupTimer;
+    let popupTimer;
 
-function showVideoPopup(){
-  videoPopup.style.display = "flex";
-  videoWrapper.classList.add("video-blurred");
-  video.pause();
-}
+    function showVideoPopup(){
+      if(!videoPopup || !videoWrapper) return;
 
-function hideVideoPopup(){
-  videoPopup.style.display = "none";
-  videoWrapper.classList.remove("video-blurred");
+      videoPopup.style.display = "flex";
+      videoWrapper.classList.add("video-blurred");
 
-  video.play().catch(function(){});
+      // Pause video while popup is visible
+      video.pause();
+    }
 
-  clearTimeout(popupTimer);
+    function hideVideoPopup(){
+      if(!videoPopup || !videoWrapper) return;
 
-  // Popup berikutnya 15 detik kemudian
-  popupTimer = setTimeout(showVideoPopup, 15000);
-}
+      videoPopup.style.display = "none";
+      videoWrapper.classList.remove("video-blurred");
 
-continueButton.addEventListener("click", function(e){
-  e.preventDefault();
+      // Resume muted autoplay after Continue
+      video.play().catch(function(){});
 
-  // Simpan bahwa popup sudah ditutup
+      // Show again after 1 minute
+      clearTimeout(popupTimer);
+      popupTimer = setTimeout(showVideoPopup, 15000);
+    }
+
+    if(videoPopup && continueButton){
+
+      continueButton.addEventListener("click", function(){
   hideVideoPopup();
-
-  // Buka URL di tab baru
-  window.open(this.href, "_blank", "noopener,noreferrer");
+  window.open(continueButton.href, "_blank");
 });
 
-// Popup pertama setelah 15 detik
-popupTimer = setTimeout(showVideoPopup, 15000);
+      // First popup appears after 1 minute
+      popupTimer = setTimeout(showVideoPopup, 15000);
     }
 
 
