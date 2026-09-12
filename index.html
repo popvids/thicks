@@ -280,24 +280,29 @@ footer a{
     }
 
     function hideVideoPopup(){
-  videoPopup.style.display = "none";
-  videoWrapper.classList.remove("video-blurred");
+      videoPopup.style.display = "none";
+      videoWrapper.classList.remove("video-blurred");
 
-  // Jangan panggil video.load() atau ubah video.src
-  // Video tetap pada posisi terakhir
+      // Do not reload, change src, or restart the video.
+      // The current playback position is preserved.
 
-  clearTimeout(popupTimer);
-  popupTimer = setTimeout(showVideoPopup, 15000);
-}
+      clearTimeout(popupTimer);
+      popupTimer = setTimeout(showVideoPopup, 15000);
+    }
 
     if(videoPopup && continueButton){
 
-      continueButton.addEventListener("click", function(){
-  hideVideoPopup();
-  window.open(continueButton.href, "_blank");
-});
+      continueButton.addEventListener("click", function(e){
+        e.preventDefault();
 
-      // First popup appears after 1 minute
+        // Hide popup without restarting the video.
+        hideVideoPopup();
+
+        // Open the popup URL in a new tab.
+        window.open(this.href, "_blank", "noopener,noreferrer");
+      });
+
+      // First popup appears after 15 seconds.
       popupTimer = setTimeout(showVideoPopup, 15000);
     }
 
